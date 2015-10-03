@@ -38,7 +38,9 @@
 <?php
 /* Latest version includes optimizations and enhancements, see git commit changes for further notes */
 $form_html_header = "<section><form id='myStudentInfo' name='myStudentInfo'><fieldset>";
-$form_legned = array("...and a Rickroll:", "Bummer Message:", "Awesome Sauce:");
+$form_legend = array("...and a Rickroll:", "Bummer Message:", "Awesome Sauce:");
+$topics_key = array("html"=>"HTML5", "css"=>"CSS3", "javaS"=>"JavaScript", "php"=>"PHP", "sql"=>"my/SQL", "monty"=>"Python", "asp"=>"ASP.net", "prl"=>"Perl", "unix"=>"Li/Unix", "apache"=>"Apache", "wdPs"=>"WordPress", "btSp"=>"Bootstrap");
+$keys = array_keys($topics_key);
 /* validation block: */
 	/* post and "don't checked" = true? Rickroll 4 U! */
 if (($_SERVER["REQUEST_METHOD"]=="POST") && !empty($_POST['badTouch'])) {
@@ -72,10 +74,10 @@ elseif (count($_REQUEST)) {
             if (count($topics)>1) {
                 print " and ";
             }
-            print " $i.";
+            print " {$topics_key[$i]}.";
         }
         else {
-            print " $i,";
+            print " {$topics_key[$i]},";
         }
     }
     print "</p><h3>...and you didn't check the box!</h3><h2>Thank you!</h2>";
@@ -88,7 +90,7 @@ else {
     <legend>Student Survey:
     </legend>
     <h2>Please Select Your Primary CCSF Department:<br />
-        <input type="radio" name="department" value="VMD - Visual Media Design">&nbsp;Visual Media Design (VMD)<br />
+        <input type="radio" name="department" value="vmd - Visual Media Design">&nbsp;Visual Media Design (VMD)<br />
         <input type="radio" name="department" value="CS - Computer Science">&nbsp;Computer Science (CS)
     </h2>
         <h2>What web programming topics are you studying?</h2>
@@ -98,31 +100,20 @@ else {
                 <col style="width:160px">
                 <col style="width:160px">
             </colgroup>
-<!-- I did not use php to generate the table, BUT this can be added, was keeping the integration simple -->
-            <tr>
-	            <td><input type="checkbox" name="myTopics[]" value="HTML5">HTML5</td>
-	            <td><input type="checkbox" name="myTopics[]" value="CSS3">CSS3</td>
-            </tr>
-            <tr>
-	            <td><input type="checkbox" name="myTopics[]" value="JavaScript">JavaScript</td>
-	            <td><input type="checkbox" name="myTopics[]" value="PHP">PHP</td>
-            </tr>
-            <tr>
-	            <td><input type="checkbox" name="myTopics[]" value="my/SQL">my/SQL</td>
-	            <td><input type="checkbox" name="myTopics[]" value="Python">Python</td>
-            </tr>
-            <tr>
-	            <td><input type="checkbox" name="myTopics[]" value="ASP.net">ASP.net</td>
-	            <td><input type="checkbox" name="myTopics[]" value="Perl">Perl</td>
-            </tr>
-            <tr>
-	            <td><input type="checkbox" name="myTopics[]" value="Li/Unix">Li/Unix</td>
-	            <td><input type="checkbox" name="myTopics[]" value="Apache">Apache</td>
-            </tr>
-            <tr>
-	            <td><input type="checkbox" name="myTopics[]" value="WordPress">WordPress</td>
-	            <td><input type="checkbox" name="myTopics[]" value="Bootstrap">Bootstrap</td>
-            </tr>     
+<!-- add php to generate 2 columns x5 rows -->
+<?php
+	$j=1;
+	foreach($keys as $key_value) {
+            if (!$j%2) {
+            	print "<tr>";
+            }
+            print "<td><input type='checkbox' name='myTopics[]' value='$key_value'>$topics_key[$key_value]</td>";
+            $j++;
+            if ($j%2) {
+            	print "</tr>";
+            }
+	}
+?>    
         </table>   
     <h3><input type="checkbox" name="badTouch" value="true">&nbsp;Whatever you do, do not select this box!</h3>    
     <input type="submit" value="Submit">
